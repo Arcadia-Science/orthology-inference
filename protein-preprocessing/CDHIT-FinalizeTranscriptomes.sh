@@ -14,10 +14,10 @@ do
 done
 
 # and the lingering transcriptomes for which we couldn't remove redundant isoforms
-for spp in $(cat NonReduced-Prots-To-CD-HIT.txt)
+while read spp
 do
     cd-hit -T 10 -l 20 -i ./unfilt-proteins/$spp.fasta -o ./final-proteins/${spp}-clean-proteome.fasta
-done
+done < NonReduced-Prots-To-CD-HIT.txt
 
 # Now we will work through the species for which proteomes are derived 
 # from genomic data (i.e. we do not have a need to remove short isoforms, 

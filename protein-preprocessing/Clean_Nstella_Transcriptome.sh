@@ -50,7 +50,7 @@ while read line
 do 
     id=$(echo $line | cut -f1 -d" ") 
     trans=$(echo $line | cut -f2 -d" ")
-    sed -i "s/${id}_1/$trans/g" ./Nstella_Transcriptomes/Nonionella_stella_control_transcripts.fasta
+    sed -i "s/${id}_1/Nonionella_stella-${id}_1 $trans/g" ./Nstella_Transcriptomes/Nonionella_stella_control_transcripts.fasta
 done < ./Nstella_Transcriptomes/genes
 
 # Add the "_1" string to the protein identifier to match the ID used in the annotation table
@@ -63,3 +63,24 @@ grep -wf ./Nstella_Transcriptomes/longest.prots.ids ./Nstella_Transcriptomes/Nst
 # Use CD-HIT to try and reduce the (still significant) redundancy - there are still more than 80,000 proteins retained!
 cd-hit -T 10 -l 20 -i ./Nstella_Transcriptomes/Nonionella_stella_control_transcripts.fasta -o ./final-proteins/Nonionella_stella-clean-proteome.fasta
 mv ./final-proteins/*clstr cdhit-clstrs 
+
+# Create a file we can use to incorporate the original eukprot IDs for these proteins
+paste ../TNCS/Nstella_Transcriptomes/longest.prots ../TNCS/Nstella_Transcriptomes/longest.prots.ids > ../TNCS/Nstella_Transcriptomes/LongestProts_NameIDs.txt
+
+# Reduce down to the ones included after using CD-HIT
+grep ">" ./final-proteins/Nonionella_stella-clean-proteome.fasta | sed "s/>//g" > og.ids
+grep -wf og.ids ../TNCS/Nstella_Transcriptomes/LongestProts_NameIDs.txt | cut -f2 > keep.ep.ids
+
+# Now go ahead and pull these protein names out, building new sequence headers
+grep ">" unfilt-proteins/EP01083_Nonionella_stella.fasta | sed "s/>//g" > ../TNCS/Nstella_Transcriptomes/Nstella_EP_ProtNames.txt
+grep -f keep.ep.ids ../TNCS/Nstella_Transcriptomes/Nstella_EP_ProtNames.txt > ep.ids && rm keep.ep.ids
+paste -d" " ep.ids og.ids > tmp && mv tmp ../TNCS/Nstella_Transcriptomes/Nstella_EP_ProtNames.txt
+rm ep.ids og.ids
+
+# Now go through and rename. Again, pretty inefficient, but it'll get the
+# job done for this one instance. 
+while read new 
+do 
+    og=$(echo $new | cut -f3 -d" ")
+    sed -i "s/$og/$new/g" ./final-proteins/Nonionella_stella-clean-proteome.fasta
+done < ../TNCS/Nstella_Transcriptomes/Nstella_EP_ProtNames.txt
