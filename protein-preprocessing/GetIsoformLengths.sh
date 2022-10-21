@@ -14,6 +14,9 @@
 # In several cases, we can generalize this so as to find what we need from 
 # the bespoke sequence name formats, and strip away everything else.
 
+# Navigate to the working directory
+cd ../../../data/TNCS/
+
 # Make a directory to hold the isoform-reduced proteomes
 mkdir -p ProteinFilteringIntermediates
 
@@ -25,19 +28,19 @@ do
     format=$(echo $species | cut -f2 -d" ")
     
     if [ "$format" == "Trinity" ]; then
-        grep ">" ./proteins/${spp}.fasta | cut -f2 -d' ' | cut -f3 -d":" | sed "s/_Nuclearia.*//g" | sed "s/_m.*//g" > prots
+        grep ">" ./unfilt-proteins/${spp}.fasta | cut -f2 -d' ' | cut -f3 -d":" | sed "s/_Nuclearia.*//g" | sed "s/_m.*//g" > prots
         sed "s/_[^_]*$//g" prots > genes
 
     elif [ "$format" == "TransDecoder" ]; then
-        grep ">" ./proteins/${spp}.fasta | sed "s/.*comp/comp/g" | sed "s/:.*//g" > prots
+        grep ">" ./unfilt-proteins/${spp}.fasta | sed "s/.*comp/comp/g" | sed "s/:.*//g" > prots
         sed "s/_[^_]*$//g" prots > genes
     
     elif [ "$format" == "PipeSeparated" ]; then
-        grep ">" ./proteins/${spp}.fasta | cut -f2,3 -d"|" | cut -f1 -d" " > prots
+        grep ">" ./unfilt-proteins/${spp}.fasta | cut -f2,3 -d"|" | cut -f1 -d" " > prots
         sed "s/.[^.]*$//g" prots > genes
         
     elif [ "$format" == "MMETS" ]; then
-        grep ">" ./proteins/${spp}.fasta | cut -f2 -d"=" | cut -f1 -d" " > prots
+        grep ">" ./unfilt-proteins/${spp}.fasta | cut -f2 -d"=" | cut -f1 -d" " > prots
         sed "s/_[^_]*$//g" prots > genes
 
     fi
@@ -48,37 +51,37 @@ do
 done < IsoformReductionList.txt
 
 # Now deal with the odds and ends that don't match the patterns above
-grep ">" ./proteins/EP00126_Sphaerothecum_destruens.fasta | cut -f2 -d" " | sed 's/\(.*\)m.*/\1/' > prots
+grep ">" ./unfilt-proteins/EP00126_Sphaerothecum_destruens.fasta | cut -f2 -d" " | sed 's/\(.*\)m.*/\1/' > prots
 sed "s/_seq.*//g" prots > genes
 paste ProtLengths/EP00126_Sphaerothecum_destruens-ProtLengths.txt genes prots > ProteinFilteringIntermediates/EP00126_Sphaerothecum_destruens-ProtLens.txt
 rm prots genes
     
-grep ">" ./proteins/EP00762_Andalucia_godoyi.fasta | cut -f2 -d" " > prots
+grep ">" ./unfilt-proteins/EP00762_Andalucia_godoyi.fasta | cut -f2 -d" " > prots
 sed "s/\..*//g" prots > genes
 paste ProtLengths/EP00762_Andalucia_godoyi-ProtLengths.txt genes prots > ProteinFilteringIntermediates/EP00762_Andalucia_godoyi-ProtLens.txt
 rm prots genes
     
-grep ">" ./proteins/EP00770_Monocercomonoides_exilis.fasta | cut -f2 -d"|" | sed "s/ //g" | sed "s/transcript=//g" > prots
+grep ">" ./unfilt-proteins/EP00770_Monocercomonoides_exilis.fasta | cut -f2 -d"|" | sed "s/ //g" | sed "s/transcript=//g" > prots
 sed "s/\..*//g" prots > genes
 paste ProtLengths/EP00770_Monocercomonoides_exilis-ProtLengths.txt genes prots > ProteinFilteringIntermediates/EP00770_Monocercomonoides_exilis-ProtLens.txt
 rm prots genes
 
-grep ">" ./proteins/EP00820_Chromera_velia.fasta | cut -f2 -d"|" | sed "s/ //g" | sed "s/transcript=//g" > prots
+grep ">" ./unfilt-proteins/EP00820_Chromera_velia.fasta | cut -f2 -d"|" | sed "s/ //g" | sed "s/transcript=//g" > prots
 sed "s/\..*//g" prots > genes
 paste ProtLengths/EP00820_Chromera_velia-ProtLengths.txt genes prots > ProteinFilteringIntermediates/EP00820_Chromera_velia-ProtLens.txt
 rm prots genes
 
-grep ">" ./proteins/EP00873_Tetraselmis_striata.fasta | cut -f4 -d"|" > prots
+grep ">" ./unfilt-proteins/EP00873_Tetraselmis_striata.fasta | cut -f4 -d"|" > prots
 sed "s/.t.*//g" prots > genes 
 paste ProtLengths/EP00873_Tetraselmis_striata-ProtLengths.txt genes prots > ProteinFilteringIntermediates/EP00873_Tetraselmis_striata-ProtLens.txt
 rm prots genes
 
-grep ">" ./proteins/EP00158_Paraphelidium_tribonemae.fasta | cut -f2 -d" " > prots
+grep ">" ./unfilt-proteins/EP00158_Paraphelidium_tribonemae.fasta | cut -f2 -d" " > prots
 sed "s/_i.*//g" prots > genes
 paste ProtLengths/EP00158_Paraphelidium_tribonemae-ProtLengths.txt genes prots > ProteinFilteringIntermediates/EP00158_Paraphelidium_tribonemae-ProtLens.txt
 rm prots genes
 
-grep ">" ./proteins/EP00741_Cyanophora_paradoxa.fasta | cut -f2 -d" " > prots 
+grep ">" ./unfilt-proteins/EP00741_Cyanophora_paradoxa.fasta | cut -f2 -d" " > prots 
 sed "s/.t.*//g" prots > genes
 paste ProtLengths/EP00741_Cyanophora_paradoxa-ProtLengths.txt genes prots > ProteinFilteringIntermediates/EP00741_Cyanophora_paradoxa-ProtLens.txt
 rm prots genes
