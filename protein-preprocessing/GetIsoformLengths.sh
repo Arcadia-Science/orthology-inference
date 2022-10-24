@@ -29,7 +29,7 @@ do
     
     if [ "$format" == "Trinity" ]; then
         grep ">" ./unfilt-proteins/${spp}.fasta | cut -f2 -d' ' | cut -f3 -d":" | sed "s/_Nuclearia.*//g" | sed "s/_m.*//g" > prots
-        sed "s/_[^_]*$//g" prots > genes
+        sed "s/_[^_]*$//g" prots | sed "s/.p.*//g" > genes
 
     elif [ "$format" == "TransDecoder" ]; then
         grep ">" ./unfilt-proteins/${spp}.fasta | sed "s/.*comp/comp/g" | sed "s/:.*//g" > prots

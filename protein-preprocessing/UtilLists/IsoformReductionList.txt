@@ -59,6 +59,7 @@ EP00672_Neobodo_designis	MMETS
 EP00696_Hemimastix_kukwesjijk	PipeSeparated
 EP00697_Spironema_sp_BW2	PipeSeparated
 EP00698_Gefionella_okellyi	Trinity
+EP00708_Paratrimastix_pyriformis    Trinity
 EP00735_Rhodelphis_limneticus	Trinity
 EP00754_Rhynchopus_humris	Trinity
 EP00756_Hemistasia_phaeocysticola	Trinity

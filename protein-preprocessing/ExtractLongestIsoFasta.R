@@ -28,7 +28,7 @@ for(f in 1:length(fs)){
     longestProts <- do.call("rbind", longestProts)[,1]
     
     # read in the species' fasta file
-    fa <- read.fasta(file = list.files(path = "./proteins/", pattern = spp, full.names=T), 
+    fa <- read.fasta(file = list.files(path = "./unfilt-proteins/", pattern = spp, full.names=T), 
                        seqtype = "AA", as.string = TRUE, set.attributes = TRUE)
     
     # Pull out the proteins we're keeping, and write out
