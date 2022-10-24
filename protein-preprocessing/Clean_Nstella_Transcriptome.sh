@@ -68,19 +68,19 @@ mv ./final-proteins/*clstr cdhit-clstrs
 paste ../TNCS/Nstella_Transcriptomes/longest.prots ../TNCS/Nstella_Transcriptomes/longest.prots.ids > ../TNCS/Nstella_Transcriptomes/LongestProts_NameIDs.txt
 
 # Reduce down to the ones included after using CD-HIT
-grep ">" ./final-proteins/Nonionella_stella-clean-proteome.fasta | sed "s/>//g" > og.ids
-grep -wf og.ids ../TNCS/Nstella_Transcriptomes/LongestProts_NameIDs.txt | cut -f2 > keep.ep.ids
+grep ">" ./final-proteins/Nonionella_stella-clean-proteome.fasta | sed "s/>//g" > trin.ids
 
 # Now go ahead and pull these protein names out, building new sequence headers
-grep ">" unfilt-proteins/EP01083_Nonionella_stella.fasta | sed "s/>//g" > ../TNCS/Nstella_Transcriptomes/Nstella_EP_ProtNames.txt
-grep -f keep.ep.ids ../TNCS/Nstella_Transcriptomes/Nstella_EP_ProtNames.txt > ep.ids && rm keep.ep.ids
-paste -d" " ep.ids og.ids > tmp && mv tmp ../TNCS/Nstella_Transcriptomes/Nstella_EP_ProtNames.txt
-rm ep.ids og.ids
+cut -f1,2 ../../data/TNCS/Nstella_Transcriptomes/Control_GeneIDs_GeneCalls.txt | awk 'BEGIN{FS=OFS=" "}{$1=$1"_1"}1' > ../TNCS/Nstella_Transcriptomes/Nstella_Original_ProtNames.txt
+grep -wf trin.ids ../TNCS/Nstella_Transcriptomes/Nstella_Original_ProtNames.txt > new.ids && rm trin.ids
+
+#Lead with the species name in the fasta header for each protein
+sed -i "s/^/Nonionella_stella:/g" new.ids
 
 # Now go through and rename. Again, pretty inefficient, but it'll get the
 # job done for this one instance. 
 while read new 
 do 
-    og=$(echo $new | cut -f3 -d" ")
+    og=$(echo $new | cut -f2 -d" ")
     sed -i "s/$og/$new/g" ./final-proteins/Nonionella_stella-clean-proteome.fasta
-done < ../TNCS/Nstella_Transcriptomes/Nstella_EP_ProtNames.txt
+done < new.ids
