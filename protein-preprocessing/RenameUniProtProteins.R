@@ -41,22 +41,3 @@ for(spp in 1:length(spps.up)){
     write.fasta(sequences = fa, names = names(fa), 
                 file.out = paste0("./final-proteins/", spps.up[spp], "-clean-proteome.fasta"))
 }
-
-# And add the species name to the protein name for Nonionella, since we handled
-# that dataset independently of everything else
-fa <- read.fasta(file = "./final-proteins/Nonionella_stella-clean-proteome.fasta", 
-                 seqtype = "AA", as.string = TRUE, set.attributes = TRUE)
-
-# rename these: Genus_species:ProteinID
-og.names <- names(fa)
-acc <- do.call('rbind', strsplit(as.character(og.names),'|',fixed=TRUE))[,2]
-names(fa) <- paste("Nonionella_stella", acc, sep = ":")
-   
-# And again, because seqinr strips all the additional details from the sequence name,
-# pull these out and combine with the names we just made
-for(i in 1:length(fa)){
-    print(i)
-    names(fa)[i] <- paste(names(fa)[i], gsub(">", "", attr(fa[[i]], 'Annot')))
-}
-write.fasta(sequences = fa, names = names(fa), 
-            file.out = paste0("./final-proteins/Nonionella_stella-clean-proteome.fasta"))
