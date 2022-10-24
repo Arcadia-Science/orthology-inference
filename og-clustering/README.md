@@ -5,9 +5,6 @@ I am currently in the process of updating these scripts for application to a rev
 Eventually we seek to build these components into a next-flow workflow to facilitate efficient distribution of computational demands/expenses across EC2 spot instances where possible. 
 
 ### A brief description of scripts is listed below. 
-1) TestMCL-InflationParams-orthofinder.sh:
+#### 1) TestMCL-InflationParams-orthofinder.sh:
   -  This will likely be reworked into nexflow, but the goal here is to cluster proteins into orthogroups using a bunch of different MCL inflation parameters. 
   -  Then, we will (this part has not been written/done yet) assess how well each inflation parameter seems to perform, based on taxonomic inclusion of orthogroups, gene ontology conservation within orthogroups, correspondance to known orthology, etc. 
-
-2)
-3)
