@@ -1,5 +1,5 @@
 #!/env/Rscript
-
+setwd("../../../data/TNCS/")
 # This script is just a bit of final tidying up, renaming something descriptive,
 # following the format: "Genus_species:ProteinID" - all additional information 
 # will subsequently be retained. 
@@ -9,13 +9,13 @@ library(seqinr)
 # as are proteins downloaded from UniProtKb, so we'll combine them.
 spps.up <- 
     c(gsub("_UniProtRefProteome.fasta", "", 
-            list.files("./proteins/", 
+            list.files("./unfilt-proteins/", 
             pattern = "UniProtRefProteome")),
       gsub("_UniProtProteome.fasta", "", 
-        list.files("./proteins/", 
+        list.files("./unfilt-proteins/", 
         pattern = "UniProtProteome")),
       gsub("_UniProtKbProteins.fasta", "", 
-        list.files("./proteins/", 
+        list.files("./unfilt-proteins/", 
         pattern = "UniProtKbProteins.fasta")))
         
 
