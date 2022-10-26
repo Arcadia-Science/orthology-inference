@@ -1,0 +1,50 @@
+# Zero to nf-core pipeline - Credit to Taylor!
+
+mamba create -n nf nf-core nextflow prettier
+conda activate nf
+
+nf-core create
+#? Workflow name phylorthology
+#? Description: taking proteomes from diverse organisms and inferring orthology, gene-family trees, and a species tree
+#? Author Arcadia Science
+#? Do you want to customize which parts of the template are used? Yes
+#? Pipeline prefix Arcadia-Science
+#? Skip template areas? done 
+#  - github_badges
+#  - igenomes
+
+cd Arcadia-Science-phylorthology/
+nf-core lint
+nf-core lint --fix files_unchanged
+
+git remote add origin git@github.com:Arcadia-Science/phylorthology.git
+git push --all origin
+
+# created a branch from master called main and switched default branch to main.
+# Rename the local master branch to main
+git branch -m master main 
+# Create a new branch named main, pushing the contents of the old master branch to it
+git push -u origin main
+# NOTE: NEED TO GO ONLINE AND SWITCH DEFAULT BRANCH FROM MASTER TO MAIN BEFORE DELTING. 
+# Delete the old remote master branch.
+git push origin --delete master
+
+# add modules
+nf-core modules install busco
+nf-core modules install diamond/makedb
+nf-core modules install diamond/blastp
+nf-core modules install iqtree
+nf-core modules install mafft
+
+# Include statements listed below:
+##### include { BUSCO } from '../modules/nf-core/busco/main' 
+##### include { DIAMOND_BLASTP } from '../modules/nf-core/diamond/blastp/main'
+##### include { DIAMOND_MAKEDB } from '../modules/nf-core/diamond/makedb/main'
+##### include { IQTREE } from '../modules/nf-core/iqtree/main'      
+##### include { MAFFT } from '../modules/nf-core/mafft/main'
+
+# (opened docker desktop)
+
+# set up on rosetta, explicitly call for docker...
+#export DOCKER_DEFAULT_PLATFORM=linux/amd64
+#nextflow run . -profile test,docker --outdir outdir
