@@ -54,6 +54,7 @@ for(spp in spps){
     if(length(toDrop) > 0){
         annots <- annots[-toDrop,]
     }
+    colnames(annots) <- gsub("[.][.]", "_", colnames(annots)) %>% gsub("[.]", "_", .) %>% sub("_$", "", .)
 
     # Write out to a tsv.
     write.table(annots, file = paste0(annotDir, spp, '-Protein-Annotations.tsv'), col.names = T, row.names = F, sep = '\t', quote = F)
